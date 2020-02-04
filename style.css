@@ -1,0 +1,92 @@
+body {
+    font: 20px Montserrat, sans-serif;
+    line-height: 1.8;
+    color: black;
+  }
+
+p {font-size: 16px;}
+
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+.margin {margin-bottom: 15px;}
+
+.container-fluid {
+  padding: 30px;
+  padding-bottom: 70px;
+}
+
+.header-container {
+  width: 100%;
+  padding: 50px;
+  background-color: #FF5733;
+  margin-bottom: 20px;
+}
+
+.header-container > h3 {
+  color: white;
+}
+
+.header-container > h4 {
+  color: white;
+}
+
+
+.header-buttons {
+  width: 60%;
+  margin: 0 auto;
+}
+
+.header-button {
+  width: 40%;
+  display: inline-block;
+  border: 1px silver solid;
+  margin: 20px;
+  margin-bottom: 50px;
+  padding: 5px;
+  border-radius: 9px;
+}
+
+.header-button > h4 {
+  color: #404040;
+}
+
+.week-block {
+  height: 300px;
+  background-size: cover;
+  background-color: gray;
+  text-align: center;
+  border-radius: 9px;
+  margin-bottom: 50px;
+}
+
+.week-block > h3 {
+  display: inline-block;
+  line-height: 250px;
+  color: white;
+  text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3)
+}
+
+.page-specs {
+  margin-top: 40px;
+  text-align: left;
+}
+
+.page-image {
+  width: 100%;
+}
+
+.page-image > img {
+  width: 90%;
+}
+
+.about-specs {
+  width: 80%;
+  margin: 40px auto;
+  text-align: left;
+}
