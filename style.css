@@ -90,3 +90,8 @@ a:hover {
   margin: 40px auto;
   text-align: left;
 }
+
+.page-specs-section {
+  width: 100%;
+  height: 350px;
+}
