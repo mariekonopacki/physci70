@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>PHYSCI 70: Intro to Digital Fabrication </title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <link href="./style.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container-fluid bg-3 text-center">
+  <a href="./index.html">
+    <div class="header-container">
+      <h3>PHYSCI 70: Introduction to Digital Fabrication </h3>
+      <h4>Marie Konopacki</h4>
+    </div>
+  </a>
+  <div class="header-buttons">
+    <a href="./final-project.html">
+      <div class="header-button">
+        <h4>Final Project Proposal</h4>
+      </div>
+    </a>
+    <a href="./about-me.html">
+      <div class="header-button">
+        <h4>About Me</h4>
+      </div>
+    </a>
+  </div>
+
+  <h3>Week 4</h3>
+  <div class="page-specs">
+    <div class="page-specs-section">
+      <div class="col-sm-4">
+        <div class="page-image"><img src="./images/week4 1.jpg"></img></div>
+      </div>
+      <div class="col-sm-8">
+        <p>For this week, we were assigned to make a “microcontroller do something”. I spent some time trying to think about what I would make it do. I wanted to lean more into the coding side of the project, considering I was really interested in the prospect of written code achieving real life commands. Although I’ve coded before, it was always front-end web development, so everything my code achieved was purely on a screen. Eventually, I decided to make a morse code translator.</p>
+      </div>
+    </div>
+    <div class="page-specs-section">
+      <div class="col-sm-4">
+        <div class="page-image"><img src="./images/week 4 2.jpg"></img></div>
+      </div>
+      <div class="col-sm-8">
+        <p>Essentially, it takes in a user-inputted string, and then the microcontroller, using its built-in LED, would flash, in morse code, the original input. For the code, I created functions that turned the LED on for both short and long increments. I then made a switch case for each letter of the alphabet and used a morse-code chart I found online to properly assign functions to each one.</p>
+      </div>
+    </div>
+    <div class="page-specs-section">
+      <div class="col-sm-4">
+        <iframe width="100%" height="300px" src="https://www.youtube.com/embed/DA6ZZ2rbGb8" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+      <div class="col-sm-8">
+        <p>Overall, I'm pretty satisfied with the finished project. To the left, I've attached a demo of me inputting the string "marie". Attached below is the code I wrote to achieve this project.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #333399; font-weight: bold">void</span> <span style="color: #0066BB; font-weight: bold">setup</span>() {
+  <span style="color: #888888">// initialize digital pin LED_BUILTIN as an output.</span>
+  pinMode(LED_BUILTIN, OUTPUT);
+  Serial.begin(<span style="color: #0000DD; font-weight: bold">9600</span>);
+
+}
+
+String input <span style="color: #333333">=</span> <span style="background-color: #fff0f0">&quot;&quot;</span>;
+
+<span style="color: #333399; font-weight: bold">void</span> <span style="color: #0066BB; font-weight: bold">loop</span>() {
+  <span style="color: #008800; font-weight: bold">if</span> (Serial.available() <span style="color: #333333">&gt;</span> <span style="color: #0000DD; font-weight: bold">0</span>) {
+    input <span style="color: #333333">=</span> Serial.readStringUntil(<span style="color: #0044DD">&#39;\n&#39;</span>);
+
+    Serial.print(input);
+
+    <span style="color: #008800; font-weight: bold">for</span>(<span style="color: #333399; font-weight: bold">int</span> i <span style="color: #333333">=</span> <span style="color: #0000DD; font-weight: bold">0</span>; i<span style="color: #333333">&lt;</span>input.length(); i<span style="color: #333333">++</span>) {
+        <span style="color: #333399; font-weight: bold">char</span> letter <span style="color: #333333">=</span> input[i];
+
+        <span style="color: #008800; font-weight: bold">switch</span> (letter) {
+          <span style="color: #008800; font-weight: bold">case</span> <span style="color: #0044DD">&#39;a&#39;</span>:
+            Short();
+            Long();
+            <span style="color: #008800; font-weight: bold">break</span>;
+          <span style="color: #008800; font-weight: bold">case</span> <span style="color: #0044DD">&#39;b&#39;</span>:
+            Long();
+            Short();
+            Short();
+            Short();
+            <span style="color: #008800; font-weight: bold">break</span>;
+           <span style="color: #008800; font-weight: bold">case</span> <span style="color: #0044DD">&#39;c&#39;</span>:
+            Long();
+            Short();
+            Long();
+            Short();
+            <span style="color: #008800; font-weight: bold">break</span>;
+           <span style="color: #008800; font-weight: bold">case</span> <span style="color: #0044DD">&#39;d&#39;</span>:
+            Long();
+            Short();
+            Short();
+            <span style="color: #008800; font-weight: bold">break</span>;
+           <span style="color: #008800; font-weight: bold">case</span> <span style="color: #0044DD">&#39;e&#39;</span>:
+            Short();
+            <span style="color: #008800; font-weight: bold">break</span>;
+           <span style="color: #008800; font-weight: bold">case</span> <span style="color: #0044DD">&#39;f&#39;</span>:
+            Short();
+            Short();
+            Long();
+            Short();
+            <span style="color: #008800; font-weight: bold">break</span>;
+           <span style="color: #008800; font-weight: bold">case</span> <span style="color: #0044DD">&#39;g&#39;</span>:
+            Long();
+            Long();
+            Short();
+            <span style="color: #008800; font-weight: bold">break</span>;
+           <span style="color: #008800; font-weight: bold">case</span> <span style="color: #0044DD">&#39;h&#39;</span>:
+            Short();
+            Short();
+            Short();
+            Short();
+            <span style="color: #008800; font-weight: bold">break</span>;
+           <span style="color: #008800; font-weight: bold">case</span> <span style="color: #0044DD">&#39;i&#39;</span>:
+            Short();
+            Short();
+            <span style="color: #008800; font-weight: bold">break</span>;
+           <span style="color: #008800; font-weight: bold">case</span> <span style="color: #0044DD">&#39;j&#39;</span>:
+            Short();
+            Long();
+            Long();
+            Long();
+            <span style="color: #008800; font-weight: bold">break</span>;
+           <span style="color: #008800; font-weight: bold">case</span> <span style="color: #0044DD">&#39;k&#39;</span>:
+            Long();
+            Short();
+            Long();
+            <span style="color: #008800; font-weight: bold">break</span>;
+           <span style="color: #008800; font-weight: bold">case</span> <span style="color: #0044DD">&#39;l&#39;</span>:
+            Short();
+            Long();
+            Short();
+            Short();
+            <span style="color: #008800; font-weight: bold">break</span>;
+           <span style="color: #008800; font-weight: bold">case</span> <span style="color: #0044DD">&#39;m&#39;</span>:
+            Long();
+            Long();
+            <span style="color: #008800; font-weight: bold">break</span>;
+           <span style="color: #008800; font-weight: bold">case</span> <span style="color: #0044DD">&#39;n&#39;</span>:
+            Long();
+            Short();
+            <span style="color: #008800; font-weight: bold">break</span>;
+           <span style="color: #008800; font-weight: bold">case</span> <span style="color: #0044DD">&#39;o&#39;</span>:
+            Long();
+            Long();
+            Long();
+            <span style="color: #008800; font-weight: bold">break</span>;
+           <span style="color: #008800; font-weight: bold">case</span> <span style="color: #0044DD">&#39;p&#39;</span>:
+            Short();
+            Long();
+            Long();
+            Short();
+            <span style="color: #008800; font-weight: bold">break</span>;
+           <span style="color: #008800; font-weight: bold">case</span> <span style="color: #0044DD">&#39;q&#39;</span>:
+            Long();
+            Long();
+            Short();
+            Long();
+            <span style="color: #008800; font-weight: bold">break</span>;
+           <span style="color: #008800; font-weight: bold">case</span> <span style="color: #0044DD">&#39;r&#39;</span>:
+            Short();
+            Long();
+            Short();
+            <span style="color: #008800; font-weight: bold">break</span>;
+           <span style="color: #008800; font-weight: bold">case</span> <span style="color: #0044DD">&#39;s&#39;</span>:
+            Short();
+            Short();
+            Short();
+            <span style="color: #008800; font-weight: bold">break</span>;
+           <span style="color: #008800; font-weight: bold">case</span> <span style="color: #0044DD">&#39;t&#39;</span>:
+            Long();
+            <span style="color: #008800; font-weight: bold">break</span>;
+           <span style="color: #008800; font-weight: bold">case</span> <span style="color: #0044DD">&#39;u&#39;</span>:
+            Short();
+            Short();
+            Long();
+            <span style="color: #008800; font-weight: bold">break</span>;
+           <span style="color: #008800; font-weight: bold">case</span> <span style="color: #0044DD">&#39;v&#39;</span>:
+            Short();
+            Short();
+            Short();
+            Long();
+            <span style="color: #008800; font-weight: bold">break</span>;
+           <span style="color: #008800; font-weight: bold">case</span> <span style="color: #0044DD">&#39;w&#39;</span>:
+            Short();
+            Long();
+            Long();
+            <span style="color: #008800; font-weight: bold">break</span>;
+           <span style="color: #008800; font-weight: bold">case</span> <span style="color: #0044DD">&#39;x&#39;</span>:
+            Long();
+            Short();
+            Short();
+            Long();
+            <span style="color: #008800; font-weight: bold">break</span>;
+           <span style="color: #008800; font-weight: bold">case</span> <span style="color: #0044DD">&#39;y&#39;</span>:
+            Long();
+            Short();
+            Long();
+            Long();
+            <span style="color: #008800; font-weight: bold">break</span>;
+           <span style="color: #008800; font-weight: bold">case</span> <span style="color: #0044DD">&#39;z&#39;</span>:
+            Long();
+            Long();
+            Short();
+            Short();
+            <span style="color: #008800; font-weight: bold">break</span>;
+        }
+       delay(<span style="color: #0000DD; font-weight: bold">1500</span>);
+    }
+  }
+}
+
+<span style="color: #333399; font-weight: bold">void</span> <span style="color: #0066BB; font-weight: bold">Long</span>() {
+  digitalWrite(LED_BUILTIN, HIGH);
+  delay(<span style="color: #0000DD; font-weight: bold">1200</span>);
+  digitalWrite(LED_BUILTIN, LOW);
+  delay(<span style="color: #0000DD; font-weight: bold">200</span>);
+}
+
+<span style="color: #333399; font-weight: bold">void</span> <span style="color: #0066BB; font-weight: bold">Short</span>() {
+  digitalWrite(LED_BUILTIN, HIGH);
+  delay(<span style="color: #0000DD; font-weight: bold">300</span>);
+  digitalWrite(LED_BUILTIN, LOW);
+  delay(<span style="color: #0000DD; font-weight: bold">200</span>);
+}
+</pre></div>
+
+
+
+
+</div>
+
+</body>
+</html>
