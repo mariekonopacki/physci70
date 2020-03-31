@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>PHYSCI 70: Intro to Digital Fabrication </title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <link href="./style.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container-fluid bg-3 text-center">
+  <a href="./index.html">
+    <div class="header-container">
+      <h3>PHYSCI 70: Introduction to Digital Fabrication </h3>
+      <h4>Marie Konopacki</h4>
+    </div>
+  </a>
+  <div class="header-buttons">
+    <a href="./final-project.html">
+      <div class="header-button">
+        <h4>Final Project Proposal</h4>
+      </div>
+    </a>
+    <a href="./about-me.html">
+      <div class="header-button">
+        <h4>About Me</h4>
+      </div>
+    </a>
+  </div>
+
+  <h3>Week 8</h3>
+  <div class="page-specs">
+    <div class="page-specs-section">
+      <div class="col-sm-4">
+        <div class="page-image"><img src="./images/me_sad.png"></img></div>
+      </div>
+      <div class="col-sm-8">
+        <p>For this week, we had to use an output device we hadn’t used before. I immediately knew I wanted to work with the LED strip. But when I received it in the mail, one of the wires came off. But then, quite miraculously, I found out that my dad owns a soldering kit. I thought I’d be in the clear then, but the solder wouldn’t stick to the LED tape. After a painful hour of labor, I finally got it the solder to work, after having to cut one a section off since the heat damage was too severe. As I plugged the strip into my computer, I was hoping for a brilliant light show…. Nada. In a final ironic twist of fate, I realized that all of the wires were attached to the wrong side. But after connecting alligator clips to the other side, I was finally set to start.</p>
+      </div>
+    </div>
+    <div class="page-specs-section">
+      <div class="col-sm-4">
+        <div class="page-image"><img src="./images/cyclonegame.jpg"></img></div>
+      </div>
+      <div class="col-sm-8">
+        <p>I really wanted this week’s project to be both whimsical and interactive. After deciding I wanted to make some kind of game, I suddenly remembered the arcade game Cyclone. Essentially, a light moves in a cycle, and the player has to press a button at precisely when the light falls on the “target”. Every time I’ve been to a bowling alley or an arcade, I always gravitate towards this game, so I knew it would be fun to make my own attempt at it. </p>
+      </div>
+    </div>
+    <div class="page-specs-section">
+      <div class="col-sm-4">
+        <iframe width="100%" height="300px" src="https://www.youtube.com/embed/whzSiSipBBE" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+      <div class="col-sm-8">
+        <p>It took me a while to figure out how to code it, since I faced some problems when incorporating the button and the delay function. After a lot of research, I realized I should use the Millis function instead of delay. I’m super satisfied with how it turned out! After each round, the game speeds up by 20% indefinitely, and if you lose a round it resets to the initial speed. Each round has a new target light so it isn’t monotonous. I’ve attached the demo to the left and the code below! </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #557799">#include &lt;Adafruit_NeoPixel.h&gt;</span>
+
+<span style="color: #557799">#define PIN        9 </span>
+<span style="color: #557799">#define NUMPIXELS 9 </span>
+<span style="color: #557799">#define BUTTONPIN   3</span>
+
+<span style="color: #333399; font-weight: bold">int</span> DELAYVAL <span style="color: #333333">=</span> <span style="color: #0000DD; font-weight: bold">200</span>; <span style="color: #888888">// Time (in milliseconds) to pause between pixels</span>
+<span style="color: #333399; font-weight: bold">unsigned</span> <span style="color: #333399; font-weight: bold">long</span> time_now <span style="color: #333333">=</span> <span style="color: #0000DD; font-weight: bold">0</span>;
+
+Adafruit_NeoPixel <span style="color: #0066BB; font-weight: bold">strip</span>(NUMPIXELS, PIN, NEO_GRB <span style="color: #333333">+</span> NEO_KHZ800);
+
+<span style="color: #333399; font-weight: bold">int</span> buttonState <span style="color: #333333">=</span> <span style="color: #0000DD; font-weight: bold">0</span>;         <span style="color: #888888">// variable for reading the pushbutton status</span>
+<span style="color: #333399; font-weight: bold">int</span> targetLight <span style="color: #333333">=</span> <span style="color: #0000DD; font-weight: bold">4</span>; <span style="color: #888888">// Set up intial target light, to be changed later</span>
+
+<span style="color: #333399; font-weight: bold">void</span> <span style="color: #0066BB; font-weight: bold">setup</span>() {
+  pinMode(BUTTONPIN, INPUT_PULLUP); <span style="color: #888888">// Initialize button </span>
+  Serial.begin(<span style="color: #0000DD; font-weight: bold">115200</span>); <span style="color: #888888">//Baud rate for the Serial Monitor</span>
+
+  strip.begin(); <span style="color: #888888">// INITIALIZE NeoPixel strip object (REQUIRED)</span>
+  strip.show();            <span style="color: #888888">// Turn OFF all pixels</span>
+  strip.setBrightness(<span style="color: #0000DD; font-weight: bold">10</span>); <span style="color: #888888">// Set BRIGHTNESS low to reduce draw (max = 255)</span>
+
+  randomSeed(analogRead(A0)); <span style="color: #888888">// Random number generator   </span>
+
+}
+
+<span style="color: #333399; font-weight: bold">void</span> <span style="color: #0066BB; font-weight: bold">loop</span>() {
+  strip.clear(); <span style="color: #888888">// Set all pixel colors to &#39;off&#39;</span>
+
+  <span style="color: #008800; font-weight: bold">for</span>(<span style="color: #333399; font-weight: bold">int</span> i<span style="color: #333333">=</span><span style="color: #0000DD; font-weight: bold">0</span>; i<span style="color: #333333">&lt;</span>NUMPIXELS; i<span style="color: #333333">++</span>) { <span style="color: #888888">// For each pixel...</span>
+    time_now <span style="color: #333333">=</span> millis(); <span style="color: #888888">// reset timer</span>
+
+    strip.clear(); <span style="color: #888888">// Set all pixel colors to &#39;off&#39;</span>
+    strip.setPixelColor(targetLight, strip.Color(<span style="color: #0000DD; font-weight: bold">200</span>, <span style="color: #0000DD; font-weight: bold">200</span>, <span style="color: #0000DD; font-weight: bold">0</span>)); <span style="color: #888888">// Keep lit the &quot;chosen&quot; bulb</span>
+
+    strip.setPixelColor(i, strip.Color(<span style="color: #0000DD; font-weight: bold">180</span>, <span style="color: #0000DD; font-weight: bold">0</span>, <span style="color: #0000DD; font-weight: bold">150</span>)); <span style="color: #888888">// Light up the current bulb</span>
+    strip.show();   <span style="color: #888888">// Send the updated pixel colors to the hardware.</span>
+
+    <span style="color: #008800; font-weight: bold">while</span>(millis() <span style="color: #333333">&lt;</span> time_now <span style="color: #333333">+</span> DELAYVAL){
+      buttonState <span style="color: #333333">=</span> digitalRead(BUTTONPIN);  <span style="color: #888888">// check if the pushbutton is pressed</span>
+      <span style="color: #008800; font-weight: bold">if</span> (buttonState) {
+        <span style="color: #008800; font-weight: bold">if</span> (i <span style="color: #333333">==</span> targetLight) { <span style="color: #888888">// If the player successfully hits it</span>
+          winblink(i); <span style="color: #888888">// Winning blink sequence</span>
+          targetLight <span style="color: #333333">=</span> random(<span style="color: #0000DD; font-weight: bold">0</span>, <span style="color: #0000DD; font-weight: bold">8</span>); <span style="color: #888888">// Random number to create new target light</span>
+          DELAYVAL <span style="color: #333333">=</span> DELAYVAL <span style="color: #333333">*</span> <span style="color: #6600EE; font-weight: bold">.8</span>; <span style="color: #888888">// Make the game go faster</span>
+        } <span style="color: #008800; font-weight: bold">else</span> {
+          loseblink(i); <span style="color: #888888">// Losing blink sequence</span>
+          DELAYVAL <span style="color: #333333">=</span> <span style="color: #0000DD; font-weight: bold">200</span>; <span style="color: #888888">// Reset delay value</span>
+        };
+      };
+    };
+  }
+}
+
+<span style="color: #333399; font-weight: bold">void</span> <span style="color: #0066BB; font-weight: bold">winblink</span>(<span style="color: #333399; font-weight: bold">int</span> i) {
+  strip.clear();
+  strip.fill(strip.Color(<span style="color: #0000DD; font-weight: bold">0</span>, <span style="color: #0000DD; font-weight: bold">200</span>, <span style="color: #0000DD; font-weight: bold">0</span>));
+  strip.show();   <span style="color: #888888">// Send the updated pixel colors to the hardware.</span>
+  delay(<span style="color: #0000DD; font-weight: bold">300</span>);
+  strip.clear();
+  strip.fill(strip.Color(<span style="color: #0000DD; font-weight: bold">0</span>, <span style="color: #0000DD; font-weight: bold">0</span>, <span style="color: #0000DD; font-weight: bold">0</span>));
+  strip.setPixelColor(i, strip.Color(<span style="color: #0000DD; font-weight: bold">100</span>, <span style="color: #0000DD; font-weight: bold">0</span>, <span style="color: #0000DD; font-weight: bold">100</span>)); <span style="color: #888888">// Light up the current bulb</span>
+  strip.show();   <span style="color: #888888">// Send the updated pixel colors to the hardware.  delay(300);</span>
+  delay(<span style="color: #0000DD; font-weight: bold">300</span>);
+  strip.clear();
+  strip.fill(strip.Color(<span style="color: #0000DD; font-weight: bold">0</span>, <span style="color: #0000DD; font-weight: bold">200</span>, <span style="color: #0000DD; font-weight: bold">0</span>));
+  strip.show();   <span style="color: #888888">// Send the updated pixel colors to the hardware.</span>
+  delay(<span style="color: #0000DD; font-weight: bold">300</span>);
+  strip.clear();
+  strip.fill(strip.Color(<span style="color: #0000DD; font-weight: bold">0</span>, <span style="color: #0000DD; font-weight: bold">0</span>, <span style="color: #0000DD; font-weight: bold">0</span>));
+  strip.setPixelColor(i, strip.Color(<span style="color: #0000DD; font-weight: bold">100</span>, <span style="color: #0000DD; font-weight: bold">0</span>, <span style="color: #0000DD; font-weight: bold">100</span>)); <span style="color: #888888">// Light up the current bulb</span>
+  strip.show();   <span style="color: #888888">// Send the updated pixel colors to the hardware.  delay(300);</span>
+  delay(<span style="color: #0000DD; font-weight: bold">300</span>);
+  strip.clear();
+  strip.fill(strip.Color(<span style="color: #0000DD; font-weight: bold">0</span>, <span style="color: #0000DD; font-weight: bold">200</span>, <span style="color: #0000DD; font-weight: bold">0</span>));
+  strip.show();   <span style="color: #888888">// Send the updated pixel colors to the hardware.</span>
+  delay(<span style="color: #0000DD; font-weight: bold">300</span>);
+  strip.clear();
+  strip.fill(strip.Color(<span style="color: #0000DD; font-weight: bold">0</span>, <span style="color: #0000DD; font-weight: bold">0</span>, <span style="color: #0000DD; font-weight: bold">0</span>));
+  strip.setPixelColor(i, strip.Color(<span style="color: #0000DD; font-weight: bold">100</span>, <span style="color: #0000DD; font-weight: bold">0</span>, <span style="color: #0000DD; font-weight: bold">100</span>)); <span style="color: #888888">// Light up the current bulb</span>
+  strip.show();   <span style="color: #888888">// Send the updated pixel colors to the hardware.  delay(300);</span>
+  delay(<span style="color: #0000DD; font-weight: bold">300</span>);
+}
+
+<span style="color: #333399; font-weight: bold">void</span> <span style="color: #0066BB; font-weight: bold">loseblink</span>(<span style="color: #333399; font-weight: bold">int</span> i) {
+  strip.clear();
+  strip.fill(strip.Color(<span style="color: #0000DD; font-weight: bold">200</span>, <span style="color: #0000DD; font-weight: bold">0</span>, <span style="color: #0000DD; font-weight: bold">0</span>));
+  strip.show();   <span style="color: #888888">// Send the updated pixel colors to the hardware.</span>
+  delay(<span style="color: #0000DD; font-weight: bold">300</span>);
+  strip.clear();
+  strip.fill(strip.Color(<span style="color: #0000DD; font-weight: bold">0</span>, <span style="color: #0000DD; font-weight: bold">0</span>, <span style="color: #0000DD; font-weight: bold">0</span>));
+  strip.setPixelColor(i, strip.Color(<span style="color: #0000DD; font-weight: bold">100</span>, <span style="color: #0000DD; font-weight: bold">0</span>, <span style="color: #0000DD; font-weight: bold">100</span>)); <span style="color: #888888">// Light up the current bulb</span>
+  strip.show();   <span style="color: #888888">// Send the updated pixel colors to the hardware.  delay(300);</span>
+  delay(<span style="color: #0000DD; font-weight: bold">300</span>);
+  strip.clear();
+  strip.fill(strip.Color(<span style="color: #0000DD; font-weight: bold">200</span>, <span style="color: #0000DD; font-weight: bold">0</span>, <span style="color: #0000DD; font-weight: bold">0</span>));
+  strip.show();   <span style="color: #888888">// Send the updated pixel colors to the hardware.</span>
+  delay(<span style="color: #0000DD; font-weight: bold">300</span>);
+  strip.clear();
+  strip.fill(strip.Color(<span style="color: #0000DD; font-weight: bold">0</span>, <span style="color: #0000DD; font-weight: bold">0</span>, <span style="color: #0000DD; font-weight: bold">0</span>));
+  strip.setPixelColor(i, strip.Color(<span style="color: #0000DD; font-weight: bold">100</span>, <span style="color: #0000DD; font-weight: bold">0</span>, <span style="color: #0000DD; font-weight: bold">100</span>)); <span style="color: #888888">// Light up the current bulb</span>
+  strip.show();   <span style="color: #888888">// Send the updated pixel colors to the hardware.  delay(300);</span>
+  delay(<span style="color: #0000DD; font-weight: bold">300</span>);
+  strip.clear();
+  strip.fill(strip.Color(<span style="color: #0000DD; font-weight: bold">200</span>, <span style="color: #0000DD; font-weight: bold">0</span>, <span style="color: #0000DD; font-weight: bold">0</span>));
+  strip.show();   <span style="color: #888888">// Send the updated pixel colors to the hardware.</span>
+  delay(<span style="color: #0000DD; font-weight: bold">300</span>);
+  strip.clear();
+  strip.fill(strip.Color(<span style="color: #0000DD; font-weight: bold">0</span>, <span style="color: #0000DD; font-weight: bold">0</span>, <span style="color: #0000DD; font-weight: bold">0</span>));
+  strip.setPixelColor(i, strip.Color(<span style="color: #0000DD; font-weight: bold">100</span>, <span style="color: #0000DD; font-weight: bold">0</span>, <span style="color: #0000DD; font-weight: bold">100</span>)); <span style="color: #888888">// Light up the current bulb</span>
+  strip.show();   <span style="color: #888888">// Send the updated pixel colors to the hardware.  delay(300);</span>
+  delay(<span style="color: #0000DD; font-weight: bold">300</span>);
+
+}
+</pre></div>
+
+
+
+
+</div>
+
+</body>
+</html>
