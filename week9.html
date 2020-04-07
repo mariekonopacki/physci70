@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>PHYSCI 70: Intro to Digital Fabrication </title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <link href="./style.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container-fluid bg-3 text-center">
+  <a href="./index.html">
+    <div class="header-container">
+      <h3>PHYSCI 70: Introduction to Digital Fabrication </h3>
+      <h4>Marie Konopacki</h4>
+    </div>
+  </a>
+  <div class="header-buttons">
+    <a href="./final-project.html">
+      <div class="header-button">
+        <h4>Final Project Proposal</h4>
+      </div>
+    </a>
+    <a href="./about-me.html">
+      <div class="header-button">
+        <h4>About Me</h4>
+      </div>
+    </a>
+  </div>
+
+  <h3>Week 8</h3>
+  <div class="page-specs">
+    <div class="page-specs-section">
+      <div class="col-sm-4">
+        <div class="page-image"><img src="./images/metro.jpg"></img></div>
+      </div>
+      <div class="col-sm-8">
+        <p>For this week, we had to establish a radio connection between two microcontrollers. I thought about smart lightbulbs that turn on when sound activated. I thought this project would be fairly straightforward, but it proved to be quite difficult when actually getting into it. I faced many problems with the D11 board, which I’m still unable to fully figure out. So instead of using that board, I used my trusty Arduino Metro, which I had managed to save before the chaos of the pandemic.</p>
+      </div>
+    </div>
+    <div class="page-specs-section">
+      <div class="col-sm-4">
+        <iframe width="100%" height="300px" src="https://www.youtube.com/embed/nYkTZ2PnndE" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+      <div class="col-sm-8">
+        <p>It took a while to figure out how to connect everything and an even longer time to figure out how to establish a radio connection, but I eventually figured it out! Attached to the left is a demo video, where I use my hand against the table to create a clapping sound which activates the build in LED on the Metro. I’ve attached my code below. </p>
+      </div>
+    </div>
+
+
+    <h3> Sender Code </h3>
+    <!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #557799">#include &lt;SPI.h&gt;</span>
+<span style="color: #557799">#include &quot;RF24.h&quot;</span>
+
+<span style="color: #888888">/* Hardware coaanfiguration: Set up nRF24L01 radio on SPI bus plus CE and CS */</span>
+RF24 <span style="color: #0066BB; font-weight: bold">radio</span>(<span style="color: #0000DD; font-weight: bold">32</span>,<span style="color: #0000DD; font-weight: bold">14</span>);      <span style="color: #888888">//CE and CS pins.  This is the change needed when you change to another board.</span>
+
+byte addresses[][<span style="color: #0000DD; font-weight: bold">6</span>] <span style="color: #333333">=</span> {<span style="background-color: #fff0f0">&quot;1Node&quot;</span>,<span style="background-color: #fff0f0">&quot;2Node&quot;</span>};
+byte data <span style="color: #333333">=</span> <span style="color: #0000DD; font-weight: bold">0</span>;
+
+<span style="color: #333399; font-weight: bold">int</span> soundSensor <span style="color: #333333">=</span> <span style="color: #0000DD; font-weight: bold">2</span>;
+
+<span style="color: #333399; font-weight: bold">void</span> <span style="color: #0066BB; font-weight: bold">setup</span>() {
+ Serial.begin(<span style="color: #0000DD; font-weight: bold">1200</span>);
+ Serial.println(<span style="background-color: #fff0f0">&quot;RF24example:  Simple tx&quot;</span>);
+
+ pinMode(soundSensor,INPUT);
+
+  radio.begin();
+
+ <span style="color: #888888">// Set the PA Level low to prevent power supply related issues since this is a</span>
+ <span style="color: #888888">// getting_started sketch, and the likelihood of close proximity of the devices. RF24_PA_MAX is default.</span>
+  radio.setPALevel(RF24_PA_LOW);
+
+  <span style="color: #888888">// Open a writing and reading pipe on each radio, with opposite addresses</span>
+
+  radio.openWritingPipe(addresses[<span style="color: #0000DD; font-weight: bold">0</span>]);
+  radio.openReadingPipe(<span style="color: #0000DD; font-weight: bold">1</span>,addresses[<span style="color: #0000DD; font-weight: bold">1</span>]);
+
+}
+
+
+<span style="color: #333399; font-weight: bold">void</span> <span style="color: #0066BB; font-weight: bold">loop</span>() {
+
+<span style="color: #333399; font-weight: bold">int</span> soundvolume <span style="color: #333333">=</span> analogRead(A2);
+
+<span style="color: #008800; font-weight: bold">if</span> (soundvolume <span style="color: #333333">&gt;</span> <span style="color: #0000DD; font-weight: bold">200</span>) {
+    Serial.println(<span style="background-color: #fff0f0">&quot;Now sending&quot;</span>);
+
+
+    <span style="color: #008800; font-weight: bold">if</span> (<span style="color: #333333">!</span>radio.write( <span style="color: #333333">&amp;</span>data, <span style="color: #0000DD; font-weight: bold">1</span> )){
+    Serial.println(F(<span style="background-color: #fff0f0">&quot;failed&quot;</span>));
+    }
+
+  data <span style="color: #333333">=</span> (analogRead(A2));   <span style="color: #888888">//default is 12 bits for ESP32 ADC, so divide by 16 to map to one byte.</span>
+    <span style="color: #888888">//data++;</span>
+  Serial.print(<span style="background-color: #fff0f0">&quot;Sent &quot;</span>);
+  Serial.println(data);
+
+  delay(<span style="color: #0000DD; font-weight: bold">100</span>);
+}
+
+
+} <span style="color: #888888">// loop end/*</span>
+</pre></div>
+
+  <h3> Receiver Code </h3>
+
+  <!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #888888">/*</span>
+<span style="color: #888888">* Simple sketch for nRF24L01+ radios  Receive side.</span>
+<span style="color: #888888">* </span>
+<span style="color: #888888">* Updated: Dec 2014 by TMRh20. Simplified Mar 2019 RMH.</span>
+<span style="color: #888888">*/</span>
+
+<span style="color: #557799">#include &lt;SPI.h&gt;</span>
+<span style="color: #557799">#include &quot;RF24.h&quot;</span>
+
+<span style="color: #888888">/* Hardware configuration: Set up nRF24L01 radio on SPI bus plus pins 7 &amp; 8 */</span>
+RF24 <span style="color: #0066BB; font-weight: bold">radio</span>(<span style="color: #0000DD; font-weight: bold">8</span>,<span style="color: #0000DD; font-weight: bold">7</span>);
+
+
+byte addresses[][<span style="color: #0000DD; font-weight: bold">6</span>] <span style="color: #333333">=</span> {<span style="background-color: #fff0f0">&quot;1Node&quot;</span>,<span style="background-color: #fff0f0">&quot;2Node&quot;</span>};
+<span style="color: #333399; font-weight: bold">int</span> angle;
+
+<span style="color: #333399; font-weight: bold">void</span> <span style="color: #0066BB; font-weight: bold">setup</span>() {
+
+  Serial.begin(<span style="color: #0000DD; font-weight: bold">1200</span>);
+  Serial.println(F(<span style="background-color: #fff0f0">&quot;RF24example:  simple receive&quot;</span>));
+
+  pinMode(LED_BUILTIN, OUTPUT);
+
+  radio.begin();
+
+  <span style="color: #888888">// Set the PA Level low to prevent power supply related issues since this is a</span>
+ <span style="color: #888888">// getting_started sketch, and the likelihood of close proximity of the devices. RF24_PA_MAX is default.</span>
+  radio.setPALevel(RF24_PA_LOW);
+
+
+    radio.openWritingPipe(addresses[<span style="color: #0000DD; font-weight: bold">1</span>]);
+    radio.openReadingPipe(<span style="color: #0000DD; font-weight: bold">1</span>,addresses[<span style="color: #0000DD; font-weight: bold">0</span>]);
+
+
+  <span style="color: #888888">// Start the radio listening for data</span>
+  radio.startListening();
+}
+
+<span style="color: #333399; font-weight: bold">void</span> <span style="color: #0066BB; font-weight: bold">loop</span>() {
+
+    byte rec_data;
+
+    <span style="color: #008800; font-weight: bold">if</span>( radio.available()){
+      <span style="color: #008800; font-weight: bold">while</span> (radio.available()) {
+        radio.read( <span style="color: #333333">&amp;</span>rec_data, <span style="color: #0000DD; font-weight: bold">1</span> );             <span style="color: #888888">// Get the payload</span>
+        <span style="color: #008800; font-weight: bold">if</span> ( rec_data <span style="color: #333333">&gt;</span> <span style="color: #0000DD; font-weight: bold">1</span>) {
+          Serial.println(rec_data);
+          digitalWrite(LED_BUILTIN, HIGH);   <span style="color: #888888">// turn the LED on (HIGH is the voltage level)</span>
+          delay(<span style="color: #0000DD; font-weight: bold">2000</span>);
+          digitalWrite(LED_BUILTIN, LOW);   <span style="color: #888888">// turn the LED on (HIGH is the voltage level) </span>
+        }
+
+      }
+     };
+
+} <span style="color: #888888">// Loop</span>
+</pre></div>
+
+
+
+  </div>
+</div>
+
+
+
+
+
+
+
+</div>
+
+</body>
+</html>
