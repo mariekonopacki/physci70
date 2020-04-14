@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>PHYSCI 70: Intro to Digital Fabrication </title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <link href="./style.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container-fluid bg-3 text-center">
+  <a href="./index.html">
+    <div class="header-container">
+      <h3>PHYSCI 70: Introduction to Digital Fabrication </h3>
+      <h4>Marie Konopacki</h4>
+    </div>
+  </a>
+  <div class="header-buttons">
+    <a href="./final-project.html">
+      <div class="header-button">
+        <h4>Final Project Proposal</h4>
+      </div>
+    </a>
+    <a href="./about-me.html">
+      <div class="header-button">
+        <h4>About Me</h4>
+      </div>
+    </a>
+  </div>
+
+  <h3>Week 10</h3>
+  <div class="page-specs">
+    <div class="page-specs-section">
+      <div class="col-sm-4">
+        <div class="page-image"><img src="./images/weatherometer.jpg"></img></div>
+      </div>
+      <div class="col-sm-8">
+        <p>This week, we had to demonstrate a communication between a microcontroller and another device. I decided I wanted to use the government’s weather API, and I was thinking of ways to use the output devices we have in stock. I then decided to use my LED strip after realizing I really liked working with it a few weeks ago! I decided to depict a week’s forecast with 7 of the pixels on the LED strip. </p>
+      </div>
+    </div>
+    <div class="page-specs-section">
+      <div class="col-sm-4">
+        <iframe width="100%" height="300px" src="https://www.youtube.com/embed/c6alHTymNfs" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+      <div class="col-sm-8">
+        <p>At first I thought about translating sunny/cloudy/rainy/snowy into pixels, but I wanted to interact with a range of colors instead, so I used the temperature in Fahrenheit. So for temperatures between 70 and 80, for instance, it would show an orangish color, whereas a temperature in between 30 and 40 would be a purplish blue. I used a LAN connection to allow my computer to interact with the microcontroller. I created 5 different city options, and, when clicked on my IP address site, the LED strip would display the city color code and 7 days worth of temperatures.</p>
+      </div>
+    </div>
+    <div class="page-specs-section">
+      <div class="col-sm-4">
+        <div class="page-image"><img src="./images/youtube.png"></img></div>
+      </div>
+      <div class="col-sm-8">
+        <p>I think it turned out well! There were some huge obstacles to overcome, and I found myself constantly debugging. But it all worked out in the end, and I’m happy with the result. I've attached the code below.</p>
+      </div>
+    </div>
+
+
+    <h3> Code </h3>
+
+    <!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #557799">#include &lt;WiFi.h&gt;</span>
+<span style="color: #557799">#include &lt;HTTPClient.h&gt;</span>
+<span style="color: #557799">#include &lt;ArduinoJson.h&gt;</span>
+<span style="color: #557799">#include &lt;Adafruit_NeoPixel.h&gt;</span>
+
+
+<span style="color: #888888">// Set up LED strip</span>
+<span style="color: #557799">#define PIN       14 </span>
+<span style="color: #557799">#define NUMPIXELS 9 </span>
+
+Adafruit_NeoPixel <span style="color: #0066BB; font-weight: bold">strip</span>(NUMPIXELS, PIN, NEO_GRB <span style="color: #333333">+</span> NEO_KHZ800);
+
+
+<span style="color: #008800; font-weight: bold">const</span> <span style="color: #333399; font-weight: bold">char</span><span style="color: #333333">*</span> ssid <span style="color: #333333">=</span> <span style="background-color: #fff0f0">&quot;MYWIFINAME&quot;</span>;
+<span style="color: #008800; font-weight: bold">const</span> <span style="color: #333399; font-weight: bold">char</span><span style="color: #333333">*</span> password <span style="color: #333333">=</span>  <span style="background-color: #fff0f0">&quot;MYWIFIPASS&quot;</span>;
+
+<span style="color: #008800; font-weight: bold">const</span> String endpoint <span style="color: #333333">=</span> <span style="background-color: #fff0f0">&quot;https://api.weather.gov/gridpoints/&quot;</span>;
+
+WiFiServer <span style="color: #0066BB; font-weight: bold">server</span>(<span style="color: #0000DD; font-weight: bold">80</span>);
+
+<span style="color: #333399; font-weight: bold">void</span> <span style="color: #0066BB; font-weight: bold">setup</span>() {
+
+  Serial.begin(<span style="color: #0000DD; font-weight: bold">115200</span>);
+
+  <span style="color: #888888">// Set up LED</span>
+  strip.begin(); <span style="color: #888888">// INITIALIZE NeoPixel strip object (REQUIRED)</span>
+  strip.show();            <span style="color: #888888">// Turn OFF all pixels ASAP</span>
+  strip.setBrightness(<span style="color: #0000DD; font-weight: bold">10</span>); <span style="color: #888888">// Set BRIGHTNESS low to reduce draw (max = 255)</span>
+
+  <span style="color: #888888">// Set up wifi</span>
+
+  WiFi.begin(ssid, password);
+
+  <span style="color: #008800; font-weight: bold">while</span> (WiFi.status() <span style="color: #333333">!=</span> WL_CONNECTED) {
+    delay(<span style="color: #0000DD; font-weight: bold">1000</span>);
+    Serial.println(<span style="background-color: #fff0f0">&quot;Connecting to WiFi..&quot;</span>);
+  }
+
+  Serial.println(<span style="background-color: #fff0f0">&quot;Connected to the WiFi network&quot;</span>);
+  Serial.println(WiFi.localIP());
+
+  server.begin();
+
+}
+
+<span style="color: #333399; font-weight: bold">int</span> value <span style="color: #333333">=</span> <span style="color: #0000DD; font-weight: bold">0</span>;
+
+<span style="color: #333399; font-weight: bold">void</span> <span style="color: #0066BB; font-weight: bold">loop</span>(){
+ WiFiClient client <span style="color: #333333">=</span> server.available();   <span style="color: #888888">// listen for incoming clients</span>
+
+  <span style="color: #008800; font-weight: bold">if</span> (client) {                             <span style="color: #888888">// if you get a client,</span>
+    Serial.println(<span style="background-color: #fff0f0">&quot;New Client.&quot;</span>);           <span style="color: #888888">// print a message out the serial port</span>
+    String currentLine <span style="color: #333333">=</span> <span style="background-color: #fff0f0">&quot;&quot;</span>;                <span style="color: #888888">// make a String to hold incoming data from the client</span>
+    <span style="color: #008800; font-weight: bold">while</span> (client.connected()) {            <span style="color: #888888">// loop while the client&#39;s connected</span>
+      <span style="color: #008800; font-weight: bold">if</span> (client.available()) {             <span style="color: #888888">// if there&#39;s bytes to read from the client,</span>
+        <span style="color: #333399; font-weight: bold">char</span> c <span style="color: #333333">=</span> client.read();             <span style="color: #888888">// read a byte, then</span>
+        Serial.write(c);                    <span style="color: #888888">// print it out the serial monitor</span>
+        <span style="color: #008800; font-weight: bold">if</span> (c <span style="color: #333333">==</span> <span style="color: #0044DD">&#39;\n&#39;</span>) {                    <span style="color: #888888">// if the byte is a newline character</span>
+
+          <span style="color: #888888">// if the current line is blank, you got two newline characters in a row.</span>
+          <span style="color: #888888">// that&#39;s the end of the client HTTP request, so send a response:</span>
+          <span style="color: #008800; font-weight: bold">if</span> (currentLine.length() <span style="color: #333333">==</span> <span style="color: #0000DD; font-weight: bold">0</span>) {
+            <span style="color: #888888">// HTTP headers always start with a response code (e.g. HTTP/1.1 200 OK)</span>
+            <span style="color: #888888">// and a content-type so the client knows what&#39;s coming, then a blank line:</span>
+            client.println(<span style="background-color: #fff0f0">&quot;HTTP/1.1 200 OK&quot;</span>);
+            client.println(<span style="background-color: #fff0f0">&quot;Content-type:text/html&quot;</span>);
+            client.println();
+
+            <span style="color: #888888">// the content of the HTTP response follows the header:</span>
+            client.print(<span style="background-color: #fff0f0">&quot;Click &lt;a href=</span><span style="color: #666666; font-weight: bold; background-color: #fff0f0">\&quot;</span><span style="background-color: #fff0f0">/NYC</span><span style="color: #666666; font-weight: bold; background-color: #fff0f0">\&quot;</span><span style="background-color: #fff0f0">&gt;here&lt;/a&gt; to show the weather forecast for New York City.&lt;br&gt;&quot;</span>);
+            client.print(<span style="background-color: #fff0f0">&quot;Click &lt;a href=</span><span style="color: #666666; font-weight: bold; background-color: #fff0f0">\&quot;</span><span style="background-color: #fff0f0">/LA</span><span style="color: #666666; font-weight: bold; background-color: #fff0f0">\&quot;</span><span style="background-color: #fff0f0">&gt;here&lt;/a&gt; to show the weather forecast for Los Angeles.&lt;br&gt;&quot;</span>);
+            client.print(<span style="background-color: #fff0f0">&quot;Click &lt;a href=</span><span style="color: #666666; font-weight: bold; background-color: #fff0f0">\&quot;</span><span style="background-color: #fff0f0">/CAM</span><span style="color: #666666; font-weight: bold; background-color: #fff0f0">\&quot;</span><span style="background-color: #fff0f0">&gt;here&lt;/a&gt; to show the weather forecast for Cambridge.&lt;br&gt;&quot;</span>);
+            client.print(<span style="background-color: #fff0f0">&quot;Click &lt;a href=</span><span style="color: #666666; font-weight: bold; background-color: #fff0f0">\&quot;</span><span style="background-color: #fff0f0">/MIA</span><span style="color: #666666; font-weight: bold; background-color: #fff0f0">\&quot;</span><span style="background-color: #fff0f0">&gt;here&lt;/a&gt; to show the weather forecast for Miami.&lt;br&gt;&quot;</span>);
+            client.print(<span style="background-color: #fff0f0">&quot;Click &lt;a href=</span><span style="color: #666666; font-weight: bold; background-color: #fff0f0">\&quot;</span><span style="background-color: #fff0f0">/CHI</span><span style="color: #666666; font-weight: bold; background-color: #fff0f0">\&quot;</span><span style="background-color: #fff0f0">&gt;here&lt;/a&gt; to show the weather forecast for Chicago.&lt;br&gt;&quot;</span>);
+
+            <span style="color: #888888">// The HTTP response ends with another blank line:</span>
+            client.println();
+            <span style="color: #888888">// break out of the while loop:</span>
+            <span style="color: #008800; font-weight: bold">break</span>;
+          } <span style="color: #008800; font-weight: bold">else</span> {    <span style="color: #888888">// if you got a newline, then clear currentLine:</span>
+            currentLine <span style="color: #333333">=</span> <span style="background-color: #fff0f0">&quot;&quot;</span>;
+          }
+        } <span style="color: #008800; font-weight: bold">else</span> <span style="color: #008800; font-weight: bold">if</span> (c <span style="color: #333333">!=</span> <span style="color: #0044DD">&#39;\r&#39;</span>) {  <span style="color: #888888">// if you got anything else but a carriage return character,</span>
+          currentLine <span style="color: #333333">+=</span> c;      <span style="color: #888888">// add it to the end of the currentLine</span>
+        }
+
+        <span style="color: #008800; font-weight: bold">if</span> (currentLine.endsWith(<span style="background-color: #fff0f0">&quot;GET /NYC&quot;</span>)) {
+          strip.clear();
+          strip.setPixelColor(<span style="color: #0000DD; font-weight: bold">1</span>, strip.Color(<span style="color: #0000DD; font-weight: bold">0</span>, <span style="color: #0000DD; font-weight: bold">0</span>, <span style="color: #0000DD; font-weight: bold">255</span>));
+          <span style="color: #008800; font-weight: bold">const</span> String location <span style="color: #333333">=</span> <span style="background-color: #fff0f0">&quot;OKX/33,36/forecast&quot;</span>;
+          getWeather(location);
+        }
+        <span style="color: #008800; font-weight: bold">if</span> (currentLine.endsWith(<span style="background-color: #fff0f0">&quot;GET /LA&quot;</span>)) {
+          strip.clear();
+          strip.setPixelColor(<span style="color: #0000DD; font-weight: bold">1</span>, strip.Color(<span style="color: #0000DD; font-weight: bold">252</span>, <span style="color: #0000DD; font-weight: bold">254</span>, <span style="color: #0000DD; font-weight: bold">2</span>));
+          <span style="color: #008800; font-weight: bold">const</span> String location <span style="color: #333333">=</span> <span style="background-color: #fff0f0">&quot;LOX/152,44/forecast&quot;</span>;
+          getWeather(location);
+        }
+        <span style="color: #008800; font-weight: bold">if</span> (currentLine.endsWith(<span style="background-color: #fff0f0">&quot;GET /CAM&quot;</span>)) {
+          strip.clear();
+          strip.setPixelColor(<span style="color: #0000DD; font-weight: bold">1</span>, strip.Color(<span style="color: #0000DD; font-weight: bold">164</span>, <span style="color: #0000DD; font-weight: bold">22</span>, <span style="color: #0000DD; font-weight: bold">2</span>));
+          <span style="color: #008800; font-weight: bold">const</span> String location <span style="color: #333333">=</span> <span style="background-color: #fff0f0">&quot;BOX/68,76/forecast&quot;</span>;
+          getWeather(location);
+        }
+        <span style="color: #008800; font-weight: bold">if</span> (currentLine.endsWith(<span style="background-color: #fff0f0">&quot;GET /MIA&quot;</span>)) {
+          strip.clear();
+          strip.setPixelColor(<span style="color: #0000DD; font-weight: bold">1</span>, strip.Color(<span style="color: #0000DD; font-weight: bold">255</span>,<span style="color: #0000DD; font-weight: bold">165</span>,<span style="color: #0000DD; font-weight: bold">0</span>));
+          <span style="color: #008800; font-weight: bold">const</span> String location <span style="color: #333333">=</span> <span style="background-color: #fff0f0">&quot;MFL/108,50/forecast&quot;</span>;
+          getWeather(location);
+        }
+        <span style="color: #008800; font-weight: bold">if</span> (currentLine.endsWith(<span style="background-color: #fff0f0">&quot;GET /CHI&quot;</span>)) {
+          strip.clear();
+          strip.setPixelColor(<span style="color: #0000DD; font-weight: bold">1</span>, strip.Color(<span style="color: #0000DD; font-weight: bold">0</span>,<span style="color: #0000DD; font-weight: bold">128</span>,<span style="color: #0000DD; font-weight: bold">0</span>));
+          <span style="color: #008800; font-weight: bold">const</span> String location <span style="color: #333333">=</span> <span style="background-color: #fff0f0">&quot;LOT/75,72/forecast&quot;</span>;
+          getWeather(location);
+        }
+      }
+    }
+    <span style="color: #888888">// close the connection:</span>
+    client.stop();
+    Serial.println(<span style="background-color: #fff0f0">&quot;Client Disconnected.&quot;</span>);
+
+  }
+}
+
+
+<span style="color: #333399; font-weight: bold">void</span> <span style="color: #0066BB; font-weight: bold">getWeather</span>(<span style="color: #008800; font-weight: bold">const</span> String location) {
+  <span style="color: #008800; font-weight: bold">if</span> ((WiFi.status() <span style="color: #333333">==</span> WL_CONNECTED)) { <span style="color: #888888">//Check the current connection status</span>
+
+    HTTPClient http;
+
+    <span style="color: #008800; font-weight: bold">const</span> String url <span style="color: #333333">=</span> endpoint <span style="color: #333333">+</span> location;
+
+    http.begin(url); <span style="color: #888888">//Specify the URL</span>
+    <span style="color: #333399; font-weight: bold">int</span> httpResponseCode <span style="color: #333333">=</span> http.GET();  <span style="color: #888888">// Make the GET request</span>
+
+    <span style="color: #008800; font-weight: bold">if</span> (httpResponseCode <span style="color: #333333">&gt;</span> <span style="color: #0000DD; font-weight: bold">0</span>) {   <span style="color: #888888">// Execute if we get a good response</span>
+
+      String payload <span style="color: #333333">=</span> http.getString();
+      Serial.println(httpResponseCode);
+      <span style="color: #888888">// Serial.println(payload); // Uncomment to view the entire payload</span>
+
+      DynamicJsonDocument doc(<span style="color: #0000DD; font-weight: bold">15000</span>); <span style="color: #888888">// Create a buffer of 10000 bytes</span>
+
+      <span style="color: #888888">// Deserialize the JSON document</span>
+      DeserializationError error <span style="color: #333333">=</span> deserializeJson(doc, payload);
+
+      <span style="color: #888888">// Test if parsing succeeds.</span>
+      <span style="color: #008800; font-weight: bold">if</span> (error) {
+        Serial.print(F(<span style="background-color: #fff0f0">&quot;deserializeJson() failed: &quot;</span>));
+        Serial.println(error.c_str());
+        <span style="color: #008800; font-weight: bold">return</span>;
+      }
+
+      <span style="color: #888888">// Navigate through JSON document, extracting some values</span>
+      <span style="color: #008800; font-weight: bold">const</span> <span style="color: #333399; font-weight: bold">int</span> day1 <span style="color: #333333">=</span> doc[<span style="background-color: #fff0f0">&quot;properties&quot;</span>][<span style="background-color: #fff0f0">&quot;periods&quot;</span>][<span style="color: #0000DD; font-weight: bold">0</span>][<span style="background-color: #fff0f0">&quot;temperature&quot;</span>];
+      <span style="color: #008800; font-weight: bold">const</span> <span style="color: #333399; font-weight: bold">int</span> day2 <span style="color: #333333">=</span> doc[<span style="background-color: #fff0f0">&quot;properties&quot;</span>][<span style="background-color: #fff0f0">&quot;periods&quot;</span>][<span style="color: #0000DD; font-weight: bold">2</span>][<span style="background-color: #fff0f0">&quot;temperature&quot;</span>];
+      <span style="color: #008800; font-weight: bold">const</span> <span style="color: #333399; font-weight: bold">int</span> day3 <span style="color: #333333">=</span> doc[<span style="background-color: #fff0f0">&quot;properties&quot;</span>][<span style="background-color: #fff0f0">&quot;periods&quot;</span>][<span style="color: #0000DD; font-weight: bold">4</span>][<span style="background-color: #fff0f0">&quot;temperature&quot;</span>];
+      <span style="color: #008800; font-weight: bold">const</span> <span style="color: #333399; font-weight: bold">int</span> day4 <span style="color: #333333">=</span> doc[<span style="background-color: #fff0f0">&quot;properties&quot;</span>][<span style="background-color: #fff0f0">&quot;periods&quot;</span>][<span style="color: #0000DD; font-weight: bold">6</span>][<span style="background-color: #fff0f0">&quot;temperature&quot;</span>];
+      <span style="color: #008800; font-weight: bold">const</span> <span style="color: #333399; font-weight: bold">int</span> day5 <span style="color: #333333">=</span> doc[<span style="background-color: #fff0f0">&quot;properties&quot;</span>][<span style="background-color: #fff0f0">&quot;periods&quot;</span>][<span style="color: #0000DD; font-weight: bold">8</span>][<span style="background-color: #fff0f0">&quot;temperature&quot;</span>];
+      <span style="color: #008800; font-weight: bold">const</span> <span style="color: #333399; font-weight: bold">int</span> day6 <span style="color: #333333">=</span> doc[<span style="background-color: #fff0f0">&quot;properties&quot;</span>][<span style="background-color: #fff0f0">&quot;periods&quot;</span>][<span style="color: #0000DD; font-weight: bold">10</span>][<span style="background-color: #fff0f0">&quot;temperature&quot;</span>];
+      <span style="color: #008800; font-weight: bold">const</span> <span style="color: #333399; font-weight: bold">int</span> day7 <span style="color: #333333">=</span> doc[<span style="background-color: #fff0f0">&quot;properties&quot;</span>][<span style="background-color: #fff0f0">&quot;periods&quot;</span>][<span style="color: #0000DD; font-weight: bold">12</span>][<span style="background-color: #fff0f0">&quot;temperature&quot;</span>];
+
+      findColor(day1, <span style="color: #0000DD; font-weight: bold">2</span>);
+      findColor(day2, <span style="color: #0000DD; font-weight: bold">3</span>);
+      findColor(day3, <span style="color: #0000DD; font-weight: bold">4</span>);
+      findColor(day4, <span style="color: #0000DD; font-weight: bold">5</span>);
+      findColor(day5, <span style="color: #0000DD; font-weight: bold">6</span>);
+      findColor(day6, <span style="color: #0000DD; font-weight: bold">7</span>);
+      findColor(day7, <span style="color: #0000DD; font-weight: bold">8</span>);
+      strip.show();
+      http.end();   <span style="color: #888888">// Close the connection</span>
+    }
+  }
+}
+
+
+<span style="color: #333399; font-weight: bold">void</span> <span style="color: #0066BB; font-weight: bold">findColor</span>(<span style="color: #333399; font-weight: bold">int</span> daytemp, <span style="color: #333399; font-weight: bold">int</span> pixel) {
+  <span style="color: #008800; font-weight: bold">if</span> (daytemp <span style="color: #333333">&lt;&lt;</span> <span style="color: #0000DD; font-weight: bold">10</span>) {
+    strip.setPixelColor(pixel, strip.Color(<span style="color: #0000DD; font-weight: bold">0</span>, <span style="color: #0000DD; font-weight: bold">0</span>, <span style="color: #0000DD; font-weight: bold">255</span>));
+    strip.show();
+  };
+  <span style="color: #008800; font-weight: bold">if</span> (daytemp <span style="color: #333333">&gt;=</span> <span style="color: #0000DD; font-weight: bold">10</span> <span style="color: #333333">&amp;&amp;</span> daytemp <span style="color: #333333">&lt;</span> <span style="color: #0000DD; font-weight: bold">20</span>) {
+     strip.setPixelColor(pixel, strip.Color(<span style="color: #0000DD; font-weight: bold">3</span>, <span style="color: #0000DD; font-weight: bold">140</span>, <span style="color: #0000DD; font-weight: bold">184</span>));
+     strip.show();
+  };
+  <span style="color: #008800; font-weight: bold">if</span> (daytemp <span style="color: #333333">&gt;=</span> <span style="color: #0000DD; font-weight: bold">20</span> <span style="color: #333333">&amp;&amp;</span> daytemp <span style="color: #333333">&lt;</span> <span style="color: #0000DD; font-weight: bold">30</span>) {
+    strip.setPixelColor(pixel, strip.Color(<span style="color: #0000DD; font-weight: bold">3</span>, <span style="color: #0000DD; font-weight: bold">110</span>, <span style="color: #0000DD; font-weight: bold">253</span>));
+    strip.show();
+  };
+  <span style="color: #008800; font-weight: bold">if</span> (daytemp <span style="color: #333333">&gt;=</span> <span style="color: #0000DD; font-weight: bold">30</span> <span style="color: #333333">&amp;&amp;</span> daytemp <span style="color: #333333">&lt;</span> <span style="color: #0000DD; font-weight: bold">40</span>) {
+    strip.setPixelColor(pixel, strip.Color(<span style="color: #0000DD; font-weight: bold">3</span>, <span style="color: #0000DD; font-weight: bold">9</span>, <span style="color: #0000DD; font-weight: bold">253</span>));
+    strip.show();
+  };
+  <span style="color: #008800; font-weight: bold">if</span> (daytemp <span style="color: #333333">&gt;=</span> <span style="color: #0000DD; font-weight: bold">40</span> <span style="color: #333333">&amp;&amp;</span> daytemp <span style="color: #333333">&lt;</span> <span style="color: #0000DD; font-weight: bold">50</span>) {
+    strip.setPixelColor(pixel, strip.Color(<span style="color: #0000DD; font-weight: bold">103</span>, <span style="color: #0000DD; font-weight: bold">9</span>, <span style="color: #0000DD; font-weight: bold">236</span>));
+    strip.show();
+  };
+  <span style="color: #008800; font-weight: bold">if</span> (daytemp <span style="color: #333333">&gt;=</span> <span style="color: #0000DD; font-weight: bold">50</span> <span style="color: #333333">&amp;&amp;</span> daytemp <span style="color: #333333">&lt;</span> <span style="color: #0000DD; font-weight: bold">60</span>) {
+    strip.setPixelColor(pixel, strip.Color(<span style="color: #0000DD; font-weight: bold">138</span>, <span style="color: #0000DD; font-weight: bold">2</span>, <span style="color: #0000DD; font-weight: bold">224</span>));
+    strip.show();
+  };
+  <span style="color: #008800; font-weight: bold">if</span> (daytemp <span style="color: #333333">&gt;=</span> <span style="color: #0000DD; font-weight: bold">60</span> <span style="color: #333333">&amp;&amp;</span> daytemp <span style="color: #333333">&lt;</span> <span style="color: #0000DD; font-weight: bold">70</span>) {
+    strip.setPixelColor(pixel, strip.Color(<span style="color: #0000DD; font-weight: bold">208</span>, <span style="color: #0000DD; font-weight: bold">75</span>, <span style="color: #0000DD; font-weight: bold">202</span>));
+    strip.show();
+  };
+  <span style="color: #008800; font-weight: bold">if</span> (daytemp <span style="color: #333333">&gt;=</span> <span style="color: #0000DD; font-weight: bold">70</span> <span style="color: #333333">&amp;&amp;</span> daytemp <span style="color: #333333">&lt;</span> <span style="color: #0000DD; font-weight: bold">80</span>) {
+    strip.setPixelColor(pixel, strip.Color(<span style="color: #0000DD; font-weight: bold">208</span>, <span style="color: #0000DD; font-weight: bold">75</span>, <span style="color: #0000DD; font-weight: bold">111</span>));
+    strip.show();
+  };
+  <span style="color: #008800; font-weight: bold">if</span> (daytemp <span style="color: #333333">&gt;=</span> <span style="color: #0000DD; font-weight: bold">80</span> <span style="color: #333333">&amp;&amp;</span> daytemp <span style="color: #333333">&lt;</span> <span style="color: #0000DD; font-weight: bold">90</span>) {
+    strip.setPixelColor(pixel, strip.Color(<span style="color: #0000DD; font-weight: bold">230</span>, <span style="color: #0000DD; font-weight: bold">75</span>, <span style="color: #0000DD; font-weight: bold">69</span>));
+    strip.show();
+  };
+  <span style="color: #008800; font-weight: bold">if</span> (daytemp <span style="color: #333333">&gt;=</span> <span style="color: #0000DD; font-weight: bold">90</span> <span style="color: #333333">&amp;&amp;</span> daytemp <span style="color: #333333">&lt;</span> <span style="color: #0000DD; font-weight: bold">100</span>) {
+    strip.setPixelColor(pixel, strip.Color(<span style="color: #0000DD; font-weight: bold">230</span>, <span style="color: #0000DD; font-weight: bold">37</span>, <span style="color: #0000DD; font-weight: bold">19</span>));
+    strip.show();
+  };
+  <span style="color: #008800; font-weight: bold">if</span> (daytemp <span style="color: #333333">&gt;=</span> <span style="color: #0000DD; font-weight: bold">100</span>) {
+    strip.setPixelColor(pixel, strip.Color(<span style="color: #0000DD; font-weight: bold">225</span>, <span style="color: #0000DD; font-weight: bold">0</span>, <span style="color: #0000DD; font-weight: bold">0</span>));
+    strip.show();
+  };
+}
+</pre></div>
+
+
+
+
+
+
+
+</div>
+
+</body>
+</html>
