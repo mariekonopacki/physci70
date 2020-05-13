@@ -19,6 +19,9 @@
 	<script src="https://www.gstatic.com/firebasejs/7.14.3/firebase-analytics.js"></script>
 
 	<script>
+
+  var firebase = require('firebase');
+
 	// Your web app's Firebase configuration
 	var firebaseConfig = {
     apiKey: "AIzaSyCKQx4AfMdcswCzK1BpXU45Zm9G1IIf3h4",
@@ -31,11 +34,6 @@
     measurementId: "G-13K0EBTQMK"
 	};
   
-  var firebase = require('firebase/app');
-  require('firebase/auth');
-  require('firebase/database');
-
-
 	// Initialize Firebase
 	firebase.initializeApp(firebaseConfig);
   firebase.analytics();
