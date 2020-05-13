@@ -37,7 +37,7 @@
   firebase.analytics();
 
 	// Get a database reference to our blog
-	var ref = firebase.database().ref("/");
+	var reference = firebase.database().ref("/");
 
 	// make the buttons call the function below
 	document.getElementById('turn-on').addEventListener('click', turnOn, false);
@@ -45,14 +45,14 @@
 
 	function turnOn(){
 		console.log("turning on");
-		ref.update({
+		reference.update({
 			"LED_STATUS": "ON"
 		});
 	}
 
 	function turnOff(){
 		console.log("turning off");
-		ref.update({
+		reference.update({
 			"LED_STATUS": "OFF"
 		});
 	}
