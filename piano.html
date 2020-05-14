@@ -3,56 +3,89 @@
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>PHYSCI 70: Introduction to Digital Fabrication</title>
+	<title>Piano</title>
+  <link rel="stylesheet" href="piano.css">
+
 </head>
 
 <body>
-	<button id="turn-on" name="turnon">Turn On </button>
-	<button id="turn-off" name="turnoff">Turn Off </button>
+
+  <h1><small>♪♫ </small> Send Marie a Tune <small> ♫♪</small></h1>
+  <h2>Piano Code sourced from https://codepen.io/gabrielcarol/pen/rGeEbY</h2>
+
+  <div class="input-sect">
+    <button id="clear-input" name="clearinput">Clear </button>
+    <input type="text" id="note-input" name="noteInput" readonly></input>
+    <button id="submit-input" name="submitinput">Submit </button>
+  </div>
+
+  <section id="main">
+        <div class="nowplaying"></div>
+        <div class="keys">
+          <div data-key="65" class="key" data-note="C">
+              <span class="hints">A</span>
+          </div>
+          <div data-key="87" class="key sharp" data-note="C#">
+              <span class="hints">W</span>
+          </div>
+          <div data-key="83" class="key" data-note="D">
+              <span class="hints">S</span>
+          </div>
+          <div data-key="69" class="key sharp" data-note="D#">
+              <span class="hints">E</span>
+          </div>
+          <div data-key="68" class="key" data-note="E">
+              <span class="hints">D</span>
+          </div>
+          <div data-key="70" class="key" data-note="F">
+              <span class="hints">F</span>
+          </div>
+          <div data-key="84" class="key sharp" data-note="F#">
+              <span class="hints">T</span>
+          </div>
+          <div data-key="71" class="key" data-note="G">
+              <span class="hints">G</span>
+          </div>
+          <div data-key="89" class="key sharp" data-note="G#">
+              <span class="hints">Y</span>
+          </div>
+          <div data-key="72" class="key" data-note="A">
+              <span class="hints">H</span>
+          </div>
+          <div data-key="85" class="key sharp" data-note="A#">
+              <span class="hints">U</span>
+          </div>
+          <div data-key="74" class="key" data-note="B">
+              <span class="hints">J</span>
+          </div>
+        </div>
+
+        <audio data-key="65" src="http://carolinegabriel.com/demo/js-keyboard/sounds/040.wav"></audio>
+        <audio data-key="87" src="http://carolinegabriel.com/demo/js-keyboard/sounds/041.wav"></audio>
+        <audio data-key="83" src="http://carolinegabriel.com/demo/js-keyboard/sounds/042.wav"></audio>
+        <audio data-key="69" src="http://carolinegabriel.com/demo/js-keyboard/sounds/043.wav"></audio>
+        <audio data-key="68" src="http://carolinegabriel.com/demo/js-keyboard/sounds/044.wav"></audio>
+        <audio data-key="70" src="http://carolinegabriel.com/demo/js-keyboard/sounds/045.wav"></audio>
+        <audio data-key="84" src="http://carolinegabriel.com/demo/js-keyboard/sounds/046.wav"></audio>
+        <audio data-key="71" src="http://carolinegabriel.com/demo/js-keyboard/sounds/047.wav"></audio>
+        <audio data-key="89" src="http://carolinegabriel.com/demo/js-keyboard/sounds/048.wav"></audio>
+        <audio data-key="72" src="http://carolinegabriel.com/demo/js-keyboard/sounds/049.wav"></audio>
+        <audio data-key="85" src="http://carolinegabriel.com/demo/js-keyboard/sounds/050.wav"></audio>
+        <audio data-key="74" src="http://carolinegabriel.com/demo/js-keyboard/sounds/051.wav"></audio>
+
+        </section>
+    </section>
+
+
+
+
 
 	<!-- The core Firebase JS SDK is always required and must be listed first -->
 	<script src="https://www.gstatic.com/firebasejs/7.13.2/firebase-app.js"></script>
 
-	<!-- TODO: Add SDKs for Firebase products that you want to use
-	     https://firebase.google.com/docs/web/setup#available-libraries -->
 	<script src="https://www.gstatic.com/firebasejs/7.13.2/firebase-database.js"></script>
 
-	<script>
-	// Your web app's Firebase configuration
-	var firebaseConfig = {
-    apiKey: "AIzaSyCKQx4AfMdcswCzK1BpXU45Zm9G1IIf3h4",
-    authDomain: "physci-70.firebaseapp.com",
-    databaseURL: "https://physci-70.firebaseio.com",
-    projectId: "physci-70",
-    storageBucket: "physci-70.appspot.com",
-    messagingSenderId: "451358951833",
-    appId: "1:451358951833:web:e6d47f8c90249527502b08",
-    measurementId: "G-13K0EBTQMK"
-	};
-
-	// Initialize Firebase
-	firebase.initializeApp(firebaseConfig);
-
-	// Get a database reference to our blog
-	var ref = firebase.database().ref("/");
-
-	// make the buttons call the function below
-	document.getElementById('turn-on').addEventListener('click', turnOn, false);
-	document.getElementById('turn-off').addEventListener('click', turnOff, false);
-
-	function turnOn(){
-		console.log("turning on");
-		ref.update({
-			"LED_STATUS": "ON"
-		});
-	}
-
-	function turnOff(){
-		console.log("turning off");
-		ref.update({
-			"LED_STATUS": "OFF"
-		});
-	}
-    </script>
+  <script src="piano.js"></script>
+	<script src="piano-firebase.js"></script>
 
 </body>

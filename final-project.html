@@ -21,7 +21,7 @@
   <div class="header-buttons">
     <a href="./final-project.html">
       <div class="header-button">
-        <h4>Final Project Proposal</h4>
+        <h4>Final Project</h4>
       </div>
     </a>
     <a href="./about-me.html">
@@ -31,37 +31,238 @@
     </a>
   </div>
 
-  <h3>Final Project Progress</h3>
+  <h3>Final Project</h3>
   <div class="page-specs" style="height:400px;">
     <div class="col-sm-4" >
-      <div class="page-image"><img src="./images/friendshiplamp.png"></img></div>
+      <div class="page-image"><img src="./images/final-pianolamp.jpg"></img></div>
     </div>
     <div class="col-sm-8">
-      <p>For my final project, I was a bit inspired by the current pandemic and the need to stay in touch with your friends, as far as they may be. A few years ago, I remember seeing "friendship lamps" on the internet. Essentially, two people have partner lights, and if one person presses their light, their friend's lamp will light up. I really like this idea, so I wanted to build on it and create something a bit more personal.</p>
+      <p>For my final project, I have created the…. <i>Piano Lamp</i>. (I’m still working on the title.) Essentially, it’s an odd little device connected to the internet, specifically to a Firebase server, and it’s listening for user music input from a website. I’ve utilized a Javascript piano I found off of the internet and modified it to give me the data of what keys a user is pressing, and once a user chooses to submit their sound, it gets uploaded to the Firebase server. From there, the Piano Lamp catches the updated database and automatically plays the new song! If a user wants to hear it again, they can press the button on top of the lamp. But once a new song is uploaded, the old one goes away. It’s almost like Snapchat… but also absolutely nothing like it! </p>
     </div>
   </div>
   <div class="page-specs" style="height:500px;">
     <div class="col-sm-4">
-      <div class="page-image"><img src="./images/lampsketch.jpg"></img></div>
+      <div class="page-image"><img src="./images/final-circuitry.jpg"></img></div>
     </div>
     <div class="col-sm-8">
-      <p>For my project, I'm creating a sort of personal voicemail machine, where each person has a "lamp" that has a microphone and speaker. The lamp is connected to the internet, where it pushes and pulls voice recordings from a private server. I spent time thinking about how I would shape the object, and what exactly it would look like. I didn't want it to look too much like a lamp, because it isn't one, but light is incorporated into the object so I had to figure out a proper way to display it. Eventually I landed on a form––there would be an upper casing supported by a patterned base. The casing would hold all of the inside parts, and a small light strip would be attached to the bottom of the casing, allowing light to shine through the patterened base.</p>
+      <p>Supplies: Breadboard (preferably of the tiny, tiny variety), buzzer, button, LED Neopixel light strip (30 pixels), Huzzah ESP32 Board, and many wires. For the casing, simply make due with an amalgam of random things you buy at the hardware store.</p>
+      <p>Although my project is a little bit different than what I had proposed, I am much happier with what this one does. I think it’s offbeat and whimsical, and something I think people would find both really fun and funny. I’m imagining having this plugged in at night as my nightlight, and one of my friends inputting a song at 3 in the morning to wake me up. The buzzer itself is pretty small but certainly mighty when it comes to volume. </p>
     </div>
   </div>
   <div class="page-specs" style="height:400px;">
     <div class="col-sm-4">
-      <div class="page-image"><img src="./images/model.png"></img></div>
+      <div class="page-image"><img src="./images/final-codesnippet.png"></img></div>
     </div>
     <div class="col-sm-8">
-      <p>I then used Fusion 360 to make a model of my object, but I did run into some difficulties. With a laptop that's running out of memory (or is it RAM?), any program that requires a lot of it makes my computer restart. I did manage to get the body, as pictured to the side, but I wasn't sure how to create the pattern on the base. I did some research, but I couldn't find tutorials for objects that aren't rounded. Apparently, there is a pattern function on Solidworks, so I'll try downloading that instead and completing my casing. </p>
+      <p>There were 3 stages to my project: building the hardware and Arduino code, building the casing, and building the website for user-input. The first stage was probably one of the hardest things I’ve ever done, and it’s all because of Firebase, C++, and how they both interact with arrays/JSON. There is simply no easy way for arrays to be accessed and modified in Firebase functions for the ESP32, and it took countless hours of meddling until I gave up on using arrays or JSON as my data storage method. Python would have made everything much easier, but I wanted to learn more about C++ and gain experience in the language. I actually ended up creating strings instead, of each note/frequency separated by a space. The hardware itself was fairly simple, as its essentially a buzzer, a button, and an LED strip connected on a circuit. Originally, I was going to use four separate stiff LED strips, each positioned on the corner of the lamp, and I had purchased soldering equipment to connect them to each other and the breadboard. Little did I know, I purchased a soldering iron that goes up to 750 degrees, and solder that has a melting point of 1070 degrees. Safe to say, it did not work out. </p>
+    </div>
+  </div>
+  <div class="page-specs" style="height:400px;">
+    <div class="col-sm-4">
+      <div class="page-image"><img src="./images/final-top.png" ></img></div>
+    </div>
+    <div class="col-sm-8">
+      <p>Once I finished with the hardware, it was time for my favorite part: making it look like a lamp. I went to the hardware store with no concept of what I wanted it to look like, but I roamed the aisles searching for things that caught my eye. Eventually, I purchased two rubber cups (that go under furniture legs), shelf liner, and yawn. When I got back, I cut holes into the rubber cups, allowing the breadboard to fit into one, and the buzzer and button to fit into the other, which then created the top and bottom of my lamp. With an excess of LED strip, I at first wasn’t sure how to incorporate it, but I eventually landed on getting a toilet paper roll and wrapping the strip around it. I then attached the roll to the top of the lamp, and then cut pieces of cardboard to make the stands, connecting the top and bottom. I cut the shelf liner and wrapped it around the lamp, creating a semi-transparent veil to soften the light. As a small, final touch, I wrapped some yarn around the bottom of the lamp because I felt like it’d be wasteful if I didn’t use it.</p>
+    </div>
+  </div>
+  <div class="page-specs-section">
+    <div class="col-sm-4">
+      <div class="page-image"><img src="./images/final-base.jpg"></img></div>
+    </div>
+    <div class="col-sm-4">
+      <div class="page-image"><img src="./images/final-wrappedLED.jpg"></img></div>
+    </div>
+    <div class="col-sm-4">
+      <div class="page-image"><img src="./images/final-pre-wrapped.png"></img></div>
+    </div>
+  </div>
+  <div class="page-specs" style="height:400px;">
+    <div class="col-sm-4">
+      <div class="page-image"><img src="./images/final-sitescreenshot.png"></img></div>
+    </div>
+    <div class="col-sm-8">
+      <p>For the website, I scoured the internet for a decent Javascript piano, and I ended up finding a great one. After attaching it to my website, I started editing it to make it better fit my project. I took away a few keys for simplicity, leaving only one octave, and I made a few small aesthetic changes. I coded a new input field, creating a function that appends any pressed key to it. There, a user can choose to submit the input to the database. Here, I have a few functions I wrote that take the input and convert it into a format that the lamp (and specifically buzzer) can read, since it plays frequencies. </p>
+
+      <a href="./piano.html">Piano Site</a>
+    </div>
+  </div>
+  <div class="page-specs" style="height:400px;">
+    <div class="col-sm-4">
+      <iframe width="100%" height="300px" src="https://www.youtube.com/embed/waudfc3EcFg" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+    <div class="col-sm-8">
+      <p>Overall, I’m so happy with this project. There are, of course, a few limitations to this project. Currently, there is no way to differentiate duration of notes, so when the buzzer plays the tune, all of the notes last the same amount of time. Additionally, I really wanted the lamp to shift through the rainbow colors as its playing the song, but I couldn’t figure out how to do both at the same time. Nevertheless, I think this project is a huge personal achievement for me, as I could never have imagined making something like this even a few months ago. </p>
     </div>
   </div>
 </div>
 
 
+<h2> Arduino Code </h2>
+<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #557799">#include &lt;Adafruit_NeoPixel.h&gt;</span>
+<span style="color: #557799">#include &lt;WiFi.h&gt;                                 </span><span style="color: #888888">// esp32 library</span>
+<span style="color: #557799">#include &lt;FirebaseESP32.h&gt;                        </span><span style="color: #888888">// firebase library</span>
+<span style="color: #557799">#include &lt;Tone32.h&gt;</span>
+<span style="color: #557799">#include &lt;stdio.h&gt;</span>
+<span style="color: #557799">#include &lt;string.h&gt;</span>
+<span style="color: #557799">#include &lt;iostream&gt;</span>
+
+<span style="color: #008800; font-weight: bold">using</span> <span style="color: #008800; font-weight: bold">namespace</span> std;
+
+<span style="color: #557799">#define FIREBASE_HOST &quot;https:</span><span style="color: #888888">//physci-70.firebaseio.com&quot;  // the project name address from firebase id</span>
+<span style="color: #557799">#define FIREBASE_AUTH &quot;OTyimyy7LpP5awQevdGlePxM5KAdhe0LHK9Xvu10&quot;                          </span><span style="color: #888888">// the secret key generated from firebase</span>
+<span style="color: #557799">#define WIFI_SSID &quot;Krumholz&quot;                                </span><span style="color: #888888">// input your home or public wifi name</span>
+<span style="color: #557799">#define WIFI_PASSWORD &quot;Waterside1&quot;                            </span><span style="color: #888888">// password of wifi ssid</span>
+
+<span style="color: #888888">// Music setup</span>
+String music_str_arr <span style="color: #333333">=</span> <span style="background-color: #fff0f0">&quot;261 293 329 349 391 440 493 587 659 &quot;</span>;
+
+<span style="color: #888888">// Buzzer setup </span>
+<span style="color: #333399; font-weight: bold">int</span> freq <span style="color: #333333">=</span> <span style="color: #0000DD; font-weight: bold">2000</span>;
+<span style="color: #333399; font-weight: bold">int</span> channel <span style="color: #333333">=</span> <span style="color: #0000DD; font-weight: bold">0</span>;
+<span style="color: #333399; font-weight: bold">int</span> resolution <span style="color: #333333">=</span> <span style="color: #0000DD; font-weight: bold">8</span>;
+
+<span style="color: #888888">// Button setup</span>
+<span style="color: #333399; font-weight: bold">int</span> buttonPin <span style="color: #333333">=</span> A0;
+<span style="color: #333399; font-weight: bold">int</span> buttonState <span style="color: #333333">=</span> <span style="color: #0000DD; font-weight: bold">0</span>;         <span style="color: #888888">// variable for reading the pushbutton status</span>
+
+<span style="color: #888888">// LED Strip setup</span>
+<span style="color: #557799">#define LIGHTPIN       14 </span>
+<span style="color: #557799">#define NUMPIXELS 29</span>
+
+Adafruit_NeoPixel <span style="color: #0066BB; font-weight: bold">strip</span>(NUMPIXELS, LIGHTPIN, NEO_GRB <span style="color: #333333">+</span> NEO_KHZ800);
 
 
+<span style="color: #888888">//Define FirebaseESP32 data object</span>
+FirebaseData firebaseData;
+
+<span style="color: #333399; font-weight: bold">void</span> <span style="color: #0066BB; font-weight: bold">setup</span>() {
+  Serial.begin(<span style="color: #0000DD; font-weight: bold">9600</span>);
+  delay(<span style="color: #0000DD; font-weight: bold">1000</span>);
+
+  <span style="color: #888888">// Buzzer setup</span>
+  ledcSetup(channel, freq, resolution);
+  ledcAttachPin(<span style="color: #0000DD; font-weight: bold">12</span>, channel);
+
+  <span style="color: #888888">// Button setup</span>
+  pinMode(buttonPin, INPUT);
+
+  <span style="color: #888888">// Light setup</span>
+  strip.begin(); <span style="color: #888888">// INITIALIZE NeoPixel strip object (REQUIRED)</span>
+  strip.show();            <span style="color: #888888">// Turn OFF all pixels ASAP</span>
+  strip.setBrightness(<span style="color: #0000DD; font-weight: bold">10</span>); <span style="color: #888888">// Set BRIGHTNESS low to reduce draw (max = 255)</span>
+  strip.fill(strip.Color(<span style="color: #0000DD; font-weight: bold">255</span>, <span style="color: #0000DD; font-weight: bold">255</span>, <span style="color: #0000DD; font-weight: bold">255</span>), <span style="color: #0000DD; font-weight: bold">0</span>, <span style="color: #0000DD; font-weight: bold">29</span>);
+  strip.show();
+
+
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);                          <span style="color: #888888">// try to connect with wifi</span>
+
+  Serial.print(<span style="background-color: #fff0f0">&quot;Connecting to &quot;</span>);
+  Serial.print(WIFI_SSID);
+  <span style="color: #008800; font-weight: bold">while</span> (WiFi.status() <span style="color: #333333">!=</span> WL_CONNECTED) {
+    Serial.print(<span style="background-color: #fff0f0">&quot;.&quot;</span>);
+    delay(<span style="color: #0000DD; font-weight: bold">500</span>);
+  }
+
+  Serial.println();
+  Serial.print(<span style="background-color: #fff0f0">&quot;Connected to &quot;</span>);
+  Serial.println(WIFI_SSID);
+  Serial.print(<span style="background-color: #fff0f0">&quot;IP Address is : &quot;</span>);
+  Serial.println(WiFi.localIP());                                <span style="color: #888888">// print local IP address</span>
+  Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);                  <span style="color: #888888">// connect to firebase</span>
+  Firebase.reconnectWiFi(<span style="color: #007020">true</span>);
+  Firebase.set(firebaseData, <span style="background-color: #fff0f0">&quot;/MUSIC_ARR&quot;</span>, music_str_arr);
+}
+
+<span style="color: #333399; font-weight: bold">void</span> <span style="color: #0066BB; font-weight: bold">loop</span>() {
+
+
+  <span style="color: #008800; font-weight: bold">while</span> (digitalRead(buttonPin) <span style="color: #333333">==</span> LOW) {
+
+    <span style="color: #888888">// Find new music array</span>
+    Firebase.get(firebaseData, <span style="background-color: #fff0f0">&quot;/MUSIC_ARR&quot;</span>);
+    String new_music_str_arr <span style="color: #333333">=</span> firebaseData.stringData();
+
+    <span style="color: #008800; font-weight: bold">if</span> (new_music_str_arr <span style="color: #333333">!=</span> music_str_arr) {
+       strip.fill(strip.Color(<span style="color: #0000DD; font-weight: bold">255</span>, <span style="color: #0000DD; font-weight: bold">0</span>, <span style="color: #0000DD; font-weight: bold">255</span>), <span style="color: #0000DD; font-weight: bold">0</span>, <span style="color: #0000DD; font-weight: bold">29</span>);
+       strip.show();
+       playMusic(new_music_str_arr);
+       rainbow(<span style="color: #0000DD; font-weight: bold">20</span>);
+       music_str_arr <span style="color: #333333">=</span> new_music_str_arr;
+
+    };
+  }
+
+  strip.fill(strip.Color(<span style="color: #0000DD; font-weight: bold">255</span>, <span style="color: #0000DD; font-weight: bold">0</span>, <span style="color: #0000DD; font-weight: bold">255</span>), <span style="color: #0000DD; font-weight: bold">0</span>, <span style="color: #0000DD; font-weight: bold">29</span>);
+  strip.show();
+  playMusic(music_str_arr);
+  rainbow(<span style="color: #0000DD; font-weight: bold">20</span>);
+
+};
+
+<span style="color: #333399; font-weight: bold">void</span> <span style="color: #0066BB; font-weight: bold">playMusic</span>(String music_str_array) {
+
+  <span style="color: #008800; font-weight: bold">for</span> (<span style="color: #333399; font-weight: bold">int</span> i <span style="color: #333333">=</span> <span style="color: #0000DD; font-weight: bold">0</span>; i <span style="color: #333333">&lt;</span> music_str_array.length() <span style="color: #333333">/</span> <span style="color: #0000DD; font-weight: bold">4</span>; i<span style="color: #333333">++</span>) {
+    String note <span style="color: #333333">=</span> getValue(music_str_array, <span style="color: #0044DD">&#39; &#39;</span>, i);
+    playNote(note.toInt());
+  }
+
+}
+
+<span style="color: #333399; font-weight: bold">void</span> <span style="color: #0066BB; font-weight: bold">playNote</span>(<span style="color: #333399; font-weight: bold">int</span> note) {
+  ledcWrite(channel, <span style="color: #0000DD; font-weight: bold">125</span>);
+  ledcWriteTone(channel, note);
+  delay(<span style="color: #0000DD; font-weight: bold">400</span>);
+  ledcWrite(channel, <span style="color: #0000DD; font-weight: bold">0</span>);
+  delay(<span style="color: #0000DD; font-weight: bold">50</span>);
+}
+
+String <span style="color: #0066BB; font-weight: bold">getValue</span>(String data, <span style="color: #333399; font-weight: bold">char</span> separator, <span style="color: #333399; font-weight: bold">int</span> index)
+{
+    <span style="color: #333399; font-weight: bold">int</span> found <span style="color: #333333">=</span> <span style="color: #0000DD; font-weight: bold">0</span>;
+    <span style="color: #333399; font-weight: bold">int</span> strIndex[] <span style="color: #333333">=</span> { <span style="color: #0000DD; font-weight: bold">0</span>, <span style="color: #333333">-</span><span style="color: #0000DD; font-weight: bold">1</span> };
+    <span style="color: #333399; font-weight: bold">int</span> maxIndex <span style="color: #333333">=</span> data.length();
+
+    <span style="color: #008800; font-weight: bold">for</span> (<span style="color: #333399; font-weight: bold">int</span> i <span style="color: #333333">=</span> <span style="color: #0000DD; font-weight: bold">0</span>; i <span style="color: #333333">&lt;=</span> maxIndex <span style="color: #333333">&amp;&amp;</span> found <span style="color: #333333">&lt;=</span> index; i<span style="color: #333333">++</span>) {
+        <span style="color: #008800; font-weight: bold">if</span> (data.charAt(i) <span style="color: #333333">==</span> separator <span style="color: #333333">||</span> i <span style="color: #333333">==</span> maxIndex) {
+            found<span style="color: #333333">++</span>;
+            strIndex[<span style="color: #0000DD; font-weight: bold">0</span>] <span style="color: #333333">=</span> strIndex[<span style="color: #0000DD; font-weight: bold">1</span>] <span style="color: #333333">+</span> <span style="color: #0000DD; font-weight: bold">1</span>;
+            strIndex[<span style="color: #0000DD; font-weight: bold">1</span>] <span style="color: #333333">=</span> (i <span style="color: #333333">==</span> maxIndex) <span style="color: #333333">?</span> i<span style="color: #333333">+</span><span style="color: #0000DD; font-weight: bold">1</span> <span style="color: #333333">:</span> i;
+        }
+    }
+    <span style="color: #008800; font-weight: bold">return</span> found <span style="color: #333333">&gt;</span> index <span style="color: #333333">?</span> data.substring(strIndex[<span style="color: #0000DD; font-weight: bold">0</span>], strIndex[<span style="color: #0000DD; font-weight: bold">1</span>]) <span style="color: #333333">:</span> <span style="background-color: #fff0f0">&quot;&quot;</span>;
+}  <span style="color: #888888">// END</span>
+
+
+<span style="color: #333399; font-weight: bold">void</span> <span style="color: #0066BB; font-weight: bold">rainbow</span>(<span style="color: #333399; font-weight: bold">uint8_t</span> wait) {
+  <span style="color: #333399; font-weight: bold">uint16_t</span> i, j;
+
+  <span style="color: #008800; font-weight: bold">for</span>(j<span style="color: #333333">=</span><span style="color: #0000DD; font-weight: bold">0</span>; j<span style="color: #333333">&lt;</span><span style="color: #0000DD; font-weight: bold">256</span>; j<span style="color: #333333">++</span>) {
+    <span style="color: #008800; font-weight: bold">for</span>(i<span style="color: #333333">=</span><span style="color: #0000DD; font-weight: bold">0</span>; i<span style="color: #333333">&lt;</span>strip.numPixels(); i<span style="color: #333333">++</span>) {
+      strip.setPixelColor(i, Wheel((i<span style="color: #333333">+</span>j) <span style="color: #333333">&amp;</span> <span style="color: #0000DD; font-weight: bold">255</span>));
+    }
+    strip.show();
+    delay(wait);
+  }
+  strip.fill(strip.Color(<span style="color: #0000DD; font-weight: bold">255</span>, <span style="color: #0000DD; font-weight: bold">255</span>, <span style="color: #0000DD; font-weight: bold">255</span>), <span style="color: #0000DD; font-weight: bold">0</span>, <span style="color: #0000DD; font-weight: bold">29</span>);
+  strip.show();
+}
+
+<span style="color: #333399; font-weight: bold">uint32_t</span> <span style="color: #0066BB; font-weight: bold">Wheel</span>(byte WheelPos) {
+  <span style="color: #008800; font-weight: bold">if</span>(WheelPos <span style="color: #333333">&lt;</span> <span style="color: #0000DD; font-weight: bold">85</span>) {
+   <span style="color: #008800; font-weight: bold">return</span> strip.Color(WheelPos <span style="color: #333333">*</span> <span style="color: #0000DD; font-weight: bold">3</span>, <span style="color: #0000DD; font-weight: bold">255</span> <span style="color: #333333">-</span> WheelPos <span style="color: #333333">*</span> <span style="color: #0000DD; font-weight: bold">3</span>, <span style="color: #0000DD; font-weight: bold">0</span>);
+  } <span style="color: #008800; font-weight: bold">else</span> <span style="color: #008800; font-weight: bold">if</span>(WheelPos <span style="color: #333333">&lt;</span> <span style="color: #0000DD; font-weight: bold">170</span>) {
+   WheelPos <span style="color: #333333">-=</span> <span style="color: #0000DD; font-weight: bold">85</span>;
+   <span style="color: #008800; font-weight: bold">return</span> strip.Color(<span style="color: #0000DD; font-weight: bold">255</span> <span style="color: #333333">-</span> WheelPos <span style="color: #333333">*</span> <span style="color: #0000DD; font-weight: bold">3</span>, <span style="color: #0000DD; font-weight: bold">0</span>, WheelPos <span style="color: #333333">*</span> <span style="color: #0000DD; font-weight: bold">3</span>);
+  } <span style="color: #008800; font-weight: bold">else</span> {
+   WheelPos <span style="color: #333333">-=</span> <span style="color: #0000DD; font-weight: bold">170</span>;
+   <span style="color: #008800; font-weight: bold">return</span> strip.Color(<span style="color: #0000DD; font-weight: bold">0</span>, WheelPos <span style="color: #333333">*</span> <span style="color: #0000DD; font-weight: bold">3</span>, <span style="color: #0000DD; font-weight: bold">255</span> <span style="color: #333333">-</span> WheelPos <span style="color: #333333">*</span> <span style="color: #0000DD; font-weight: bold">3</span>);
+  }
+}
+</pre>
 </div>
+</div>
+
+
 
 </body>
 </html>
